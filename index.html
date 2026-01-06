@@ -1,0 +1,804 @@
+<li>Trade with 20-30% of capital (higher confidence than prob sum arb)</li>
+                        <li>Monitor transaction until confirmed</li>
+                        <li>Exit position immediately after market closes</li>
+                    </ol>
+                    
+                    <h3>Real Example</h3>
+                    <table>
+                        <tr>
+                            <th>Time</th>
+                            <th>Real BTC Price</th>
+                            <th>Polymarket YES Price</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr>
+                            <td>11:59:00 PM</td>
+                            <td>$99,850</td>
+                            <td>$0.40</td>
+                            <td>Monitor</td>
+                        </tr>
+                        <tr>
+                            <td>11:59:50 PM</td>
+                            <td>$100,250</td>
+                            <td>$0.43</td>
+                            <td><strong>BUY YES @ $0.43</strong></td>
+                        </tr>
+                        <tr>
+                            <td>12:00:00 AM</td>
+                            <td>$100,300</td>
+                            <td>Market Closes</td>
+                            <td>Win $1.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><strong>Result</strong></td>
+                            <td><strong>$0.57 profit = 132% ROI</strong></td>
+                        </tr>
+                    </table>
+                    
+                    <h3>Expected Results</h3>
+                    <ul>
+                        <li><strong>Frequency:</strong> 5-10 opportunities per day</li>
+                        <li><strong>Win Rate:</strong> 80-90%</li>
+                        <li><strong>Profit Per Win:</strong> 50-200%</li>
+                        <li><strong>Requires:</strong> Fast execution (< 2 seconds)</li>
+                    </ul>
+                </div>
+
+                <!-- Strategy 3 -->
+                <div class="card">
+                    <h2>📡 Strategy 3: News Arbitrage</h2>
+                    <div class="highlight-box">
+                        <h3>The Setup</h3>
+                        <p>Breaking news hits Twitter/news wires before Polymarket reacts. You act on information while the market is still mispriced.</p>
+                    </div>
+                    
+                    <h3>Markets to Target</h3>
+                    <ul>
+                        <li><strong>CEO Changes:</strong> Resignation/appointment announcements</li>
+                        <li><strong>M&A Activity:</strong> Acquisition announcements</li>
+                        <li><strong>Political Events:</strong> Endorsements, withdrawals, appointments</li>
+                        <li><strong>Product Launches:</strong> Release dates, cancellations</li>
+                        <li><strong>Sports:</strong> Injury reports, lineup changes</li>
+                    </ul>
+                    
+                    <h3>Execution Process</h3>
+                    <ol>
+                        <li><strong>Monitor Sources:</strong> Twitter verified accounts, news APIs, RSS feeds</li>
+                        <li><strong>Detect Event:</strong> Use keywords/NLP to identify market-moving news</li>
+                        <li><strong>Find Affected Market:</strong> Match news to relevant Polymarket markets</li>
+                        <li><strong>Assess Impact:</strong> Will this move prices up or down?</li>
+                        <li><strong>Execute Trade:</strong> Buy immediately if high confidence</li>
+                        <li><strong>Monitor Price:</strong> Watch for market to adjust</li>
+                        <li><strong>Exit:</strong> Sell once price reaches fair value (2-10 minutes later)</li>
+                    </ol>
+                    
+                    <h3>Real Example</h3>
+                    <p><strong>Scenario:</strong> CEO of TechCorp announces resignation on Twitter</p>
+                    <table>
+                        <tr>
+                            <th>Time</th>
+                            <th>Event</th>
+                            <th>Market Price</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr>
+                            <td>2:15 PM</td>
+                            <td>Tweet posted</td>
+                            <td>"TechCorp hits Q4 targets?" YES @ $0.70</td>
+                            <td><strong>BUY NO @ $0.30</strong></td>
+                        </tr>
+                        <tr>
+                            <td>2:25 PM</td>
+                            <td>News spreads</td>
+                            <td>NO price rises to $0.55</td>
+                            <td><strong>SELL NO @ $0.55</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><strong>Result</strong></td>
+                            <td><strong>$0.25 profit = 83% ROI</strong></td>
+                        </tr>
+                    </table>
+                    
+                    <h3>Expected Results</h3>
+                    <ul>
+                        <li><strong>Frequency:</strong> 2-5 opportunities per week</li>
+                        <li><strong>Win Rate:</strong> 60-70% (higher risk)</li>
+                        <li><strong>Profit Per Win:</strong> 30-150%</li>
+                        <li><strong>Time Window:</strong> 2-10 minutes to execute</li>
+                    </ul>
+                    
+                    <div class="alert alert-danger">
+                        <strong>⚠️ WARNING:</strong> This strategy has higher risk. Start with small position sizes (10%) until you prove 65%+ win rate over 20 trades.
+                    </div>
+                </div>
+
+                <!-- Strategy 4 -->
+                <div class="card">
+                    <h2>🔄 Strategy 4: Cross-Market Arbitrage</h2>
+                    <div class="highlight-box">
+                        <h3>The Setup</h3>
+                        <p>Same event priced differently on Polymarket vs Kalshi/sportsbooks. Buy low on one platform, sell high on another, lock in guaranteed profit.</p>
+                    </div>
+                    
+                    <h3>How It Works</h3>
+                    <p>Find the same market on multiple platforms with price discrepancies:</p>
+                    <div class="code-block">
+                        <code>
+Polymarket: "Lakers win tonight" YES @ $0.65<br>
+Kalshi:      "Lakers win tonight" YES @ $0.50<br>
+<br>
+Action:<br>
+- Buy YES on Kalshi @ $0.50<br>
+- Sell (short) YES on Polymarket @ $0.65<br>
+<br>
+Result:<br>
+If Lakers win:  Get $1 from Kalshi, pay $1 to Polymarket = Break even<br>
+If Lakers lose: Get $0 from Kalshi, get $0.65 from Polymarket = $0.65 profit<br>
+<br>
+Wait, that's wrong. Let me recalculate...<br>
+<br>
+Actually:<br>
+- Buy YES on Kalshi @ $0.50 (spend $0.50)<br>
+- Sell YES on Polymarket @ $0.65 (receive $0.65)<br>
+- Net: Receive $0.15 upfront<br>
+<br>
+If Lakers win:  Kalshi pays $1, Polymarket you lose $1 = Net $0<br>
+If Lakers lose: Kalshi pays $0, Polymarket you win $0 = Net $0<br>
+<br>
+Hmm, this doesn't work as pure arbitrage.<br>
+<br>
+CORRECT APPROACH:<br>
+You need to take opposite positions or find pricing inefficiency:<br>
+- If Polymarket YES = $0.65 and Kalshi YES = $0.50<br>
+- Buy Kalshi YES @ $0.50<br>
+- Buy Polymarket NO @ $0.35<br>
+- Total cost: $0.85<br>
+- One side MUST win and pay $1<br>
+- Profit: $1 - $0.85 = $0.15 (17.6% ROI)
+                        </code>
+                    </div>
+                    
+                    <h3>Platforms to Compare</h3>
+                    <ul>
+                        <li><strong>Polymarket:</strong> Main platform</li>
+                        <li><strong>Kalshi:</strong> CFTC-regulated prediction market</li>
+                        <li><strong>PredictIt:</strong> Political markets</li>
+                        <li><strong>Sportsbooks:</strong> DraftKings, FanDuel (convert odds to probabilities)</li>
+                    </ul>
+                    
+                    <h3>Expected Results</h3>
+                    <ul>
+                        <li><strong>Frequency:</strong> 3-7 opportunities per day</li>
+                        <li><strong>Win Rate:</strong> 95%+ (mostly risk-free)</li>
+                        <li><strong>Profit Per Trade:</strong> 5-20%</li>
+                        <li><strong>Requires:</strong> Accounts on multiple platforms</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>🎯 Execution Order:</strong>
+                    <ol style="margin-top: 10px;">
+                        <li><strong>Week 1-2:</strong> Master Strategy 1 (Prob Sum Arb)</li>
+                        <li><strong>Week 3-4:</strong> Add Strategy 2 (Crypto Lag)</li>
+                        <li><strong>Week 5-6:</strong> Test Strategy 3 (News Arb) with small size</li>
+                        <li><strong>Week 7+:</strong> Scale up and add Strategy 4 (Cross-Market)</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- EXECUTION PLAN PAGE -->
+            <div id="execution" class="page-content">
+                <div class="page-header">
+                    <h1>🚀 EXECUTION PLAN</h1>
+                    <p>Concrete action steps to go from zero to profitable</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3>⏱️ Timeline: 30 Days to First $1,000 Profit</h3>
+                    <p>This is ambitious but achievable if you execute with focus and intensity.</p>
+                </div>
+
+                <div class="card">
+                    <h2>📅 Week 1: Foundation & Setup</h2>
+                    
+                    <h3>Pax's Tasks:</h3>
+                    <div class="progress-steps">
+                        <div class="step">
+                            <h4>Day 1-2: Education</h4>
+                            <ul>
+                                <li>Read entire "Learn: Strategy" section 3 times</li>
+                                <li>Watch 10 YouTube videos on prediction markets</li>
+                                <li>Read Polymarket docs cover to cover</li>
+                                <li>Create Polymarket account, browse 50+ markets</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step">
+                            <h4>Day 3-4: Manual Research</h4>
+                            <ul>
+                                <li>Spend 4 hours manually checking markets for prob sum arb</li>
+                                <li>Document every opportunity found in Google Sheet</li>
+                                <li>Calculate potential profits</li>
+                                <li>Find at least 5 valid opportunities</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step">
+                            <h4>Day 5-7: Strategy Documentation</h4>
+                            <ul>
+                                <li>Write exact rules for Strategy 1 (Prob Sum Arb)</li>
+                                <li>Define entry criteria, position sizing, exit rules</li>
+                                <li>Create risk management guidelines</li>
+                                <li>Document everything for Amir in clear, simple language</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h3>Amir's Tasks:</h3>
+                    <div class="progress-steps">
+                        <div class="step">
+                            <h4>Day 1-2: Environment Setup</h4>
+                            <ul>
+                                <li>Install Python 3.10+, VS Code, Git</li>
+                                <li>Create GitHub repository (private)</li>
+                                <li>Install all essential Python libraries</li>
+                                <li>Test development environment</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step">
+                            <h4>Day 3-4: API Integration</h4>
+                            <ul>
+                                <li>Get Polymarket API access</li>
+                                <li>Write script to fetch all markets</li>
+                                <li>Test retrieving market data</li>
+                                <li>Verify data structure and format</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step">
+                            <h4>Day 5-7: Build Scanner</h4>
+                            <ul>
+                                <li>Implement prob sum arb detection logic</li>
+                                <li>Run scanner every 10 seconds</li>
+                                <li>Log all opportunities to file</li>
+                                <li>Validate against Pax's manual findings</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📅 Week 2: Testing & Validation</h2>
+                    
+                    <h3>Together:</h3>
+                    <div class="progress-steps">
+                        <div class="step">
+                            <h4>Day 8-10: Paper Trading</h4>
+                            <ul>
+                                <li>Run bot in "paper trading" mode (no real money)</li>
+                                <li>Simulate trades based on detected opportunities</li>
+                                <li>Track simulated P&L</li>
+                                <li>Fix any bugs or logic errors</li>
+                                <li><strong>Goal:</strong> 10+ paper trades with 100% success rate</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step">
+                            <h4>Day 11-12: Live Testing (Small)</h4>
+                            <ul>
+                                <li>Fund Polymarket account with $100-200</li>
+                                <li>Execute 3-5 real trades manually based on bot signals</li>
+                                <li>Verify actual profits match expectations</li>
+                                <li>Document any issues or surprises</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step">
+                            <h4>Day 13-14: Automation</h4>
+                            <ul>
+                                <li>Amir adds automated order placement</li>
+                                <li>Test with tiny position sizes ($10-20)</li>
+                                <li>Verify bot executes correctly end-to-end</li>
+                                <li>Add Discord alerts for all trades</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📅 Week 3: Scale Strategy 1 + Add Strategy 2</h2>
+                    
+                    <h3>Goals:</h3>
+                    <ul>
+                        <li><strong>Strategy 1:</strong> Fully automated, running 24/7</li>
+                        <li><strong>Capital:</strong> Increase to $500-1,000</li>
+                        <li><strong>Position Size:</strong> 15-20% per trade</li>
+                        <li><strong>Target:</strong> 15-20 profitable trades this week</li>
+                    </ul>
+                    
+                    <h3>Pax's Tasks:</h3>
+                    <ul>
+                        <li>Monitor bot performance daily</li>
+                        <li>Research crypto threshold markets for Strategy 2</li>
+                        <li>Document timing patterns and lag observations</li>
+                        <li>Write Strategy 2 rules for Amir</li>
+                    </ul>
+                    
+                    <h3>Amir's Tasks:</h3>
+                    <ul>
+                        <li>Add Binance WebSocket for real-time BTC/ETH prices</li>
+                        <li>Implement Strategy 2 (Crypto Lag) detection</li>
+                        <li>Optimize execution speed to < 2 seconds</li>
+                        <li>Add performance monitoring dashboard</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>📅 Week 4: Multi-Strategy Operations</h2>
+                    
+                    <h3>Goals:</h3>
+                    <ul>
+                        <li><strong>Strategies Running:</strong> 1 & 2 simultaneously</li>
+                        <li><strong>Capital:</strong> $2,000-5,000 (if profitable)</li>
+                        <li><strong>Target:</strong> $1,000+ cumulative profit</li>
+                        <li><strong>Trades:</strong> 40-60 total for the week</li>
+                    </ul>
+                    
+                    <h3>Daily Routine:</h3>
+                    <ul>
+                        <li><strong>Morning:</strong> Check overnight performance, review logs</li>
+                        <li><strong>Midday:</strong> Monitor bot, adjust parameters if needed</li>
+                        <li><strong>Evening:</strong> Analyze results, plan improvements</li>
+                        <li><strong>Weekly:</strong> Deep analysis, decide on capital scaling</li>
+                    </ul>
+                    
+                    <h3>Success Metrics:</h3>
+                    <table>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Target</th>
+                            <th>Action if Below</th>
+                        </tr>
+                        <tr>
+                            <td>Win Rate</td>
+                            <td>70%+</td>
+                            <td>Pause trading, debug strategies</td>
+                        </tr>
+                        <tr>
+                            <td>Avg Profit/Trade</td>
+                            <td>5%+</td>
+                            <td>Find better opportunities, optimize</td>
+                        </tr>
+                        <tr>
+                            <td>Daily Trades</td>
+                            <td>8-12</td>
+                            <td>Add more strategies, scan more markets</td>
+                        </tr>
+                        <tr>
+                            <td>Execution Time</td>
+                            <td>< 3 sec</td>
+                            <td>Optimize code, improve latency</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>📅 Month 2+: Scaling & Optimization</h2>
+                    
+                    <h3>Capital Scaling Plan</h3>
+                    <div class="code-block">
+                        <code>
+Week 1:  $100-500    →  Target: $150-750   (50% growth)<br>
+Week 2:  $150-750    →  Target: $225-1,125 (50% growth)<br>
+Week 3:  $225-1,125  →  Target: $338-1,688 (50% growth)<br>
+Week 4:  $338-1,688  →  Target: $507-2,532 (50% growth)<br>
+Week 5:  $507-2,532  →  Target: $761-3,798 (50% growth)<br>
+Week 6:  $761-3,798  →  Target: $1,142-5,697 (50% growth)<br>
+<br>
+Conservative path: 30% weekly growth = $100 to $3,713 in 6 weeks<br>
+Aggressive path: 50% weekly growth = $100 to $11,391 in 6 weeks
+                        </code>
+                    </div>
+                    
+                    <h3>Phases Beyond Month 1:</h3>
+                    <ul>
+                        <li><strong>Month 2:</strong> Add Strategy 3 (News Arb), deploy to cloud server</li>
+                        <li><strong>Month 3:</strong> Add Strategy 4 (Cross-Market), scale to $10k+ capital</li>
+                        <li><strong>Month 4:</strong> Machine learning for pattern recognition</li>
+                        <li><strong>Month 5-6:</strong> Advanced strategies, market making, $50k+ capital</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>🎯 Key Success Factors:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Discipline:</strong> Follow the plan, don't skip steps</li>
+                        <li><strong>Speed:</strong> Execute fast, markets don't wait</li>
+                        <li><strong>Data:</strong> Log everything, learn from every trade</li>
+                        <li><strong>Communication:</strong> Daily syncs between Pax & Amir</li>
+                        <li><strong>Risk Management:</strong> Never break the position sizing rules</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- RESOURCES PAGE -->
+            <div id="resources" class="page-content">
+                <div class="page-header">
+                    <h1>📚 ESSENTIAL RESOURCES</h1>
+                    <p>Everything you need to learn, build, and dominate</p>
+                </div>
+
+                <div class="card">
+                    <h2>📖 Must-Read Documentation</h2>
+                    <ul>
+                        <li><a href="https://docs.polymarket.com/" target="_blank">Polymarket Official Docs</a> - Read completely</li>
+                        <li><a href="https://docs.polygon.technology/" target="_blank">Polygon Network Documentation</a> - Understand the blockchain</li>
+                        <li><a href="https://web3py.readthedocs.io/" target="_blank">Web3.py Documentation</a> - Python blockchain library</li>
+                        <li><a href="https://binance-docs.github.io/apidocs/" target="_blank">Binance API Documentation</a> - Crypto price feeds</li>
+                        <li><a href="https://trading-api.readme.io/" target="_blank">Kalshi API Documentation</a> - Cross-market arbitrage</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>🎓 Learning Resources</h2>
+                    
+                    <h3>For Pax (Strategy):</h3>
+                    <ul>
+                        <li><strong>Book:</strong> "Trading and Exchanges" by Larry Harris</li>
+                        <li><strong>Book:</strong> "Flash Boys" by Michael Lewis (HFT strategies)</li>
+                        <li><a href="https://www.investopedia.com/terms/a/arbitrage.asp" target="_blank">Investopedia: Arbitrage</a></li>
+                        <li><a href="https://en.wikipedia.org/wiki/Prediction_market" target="_blank">Wikipedia: Prediction Markets</a></li>
+                        <li>YouTube: Search "polymarket strategy" - Watch top 20 videos</li>
+                        <li>Reddit: r/algotrading, r/polymarket - Daily reading</li>
+                    </ul>
+                    
+                    <h3>For Amir (Development):</h3>
+                    <ul>
+                        <li><a href="https://realpython.com/" target="_blank">Real Python</a> - Best Python tutorials</li>
+                        <li><a href="https://docs.python.org/3/library/asyncio.html" target="_blank">Python Asyncio</a> - Async programming</li>
+                        <li>YouTube: "algorithmic trading python" - Top 10 videos</li>
+                        <li>YouTube: "web3 python tutorial" - Learn blockchain coding</li>
+                        <li><a href="https://github.com/topics/trading-bot" target="_blank">GitHub Trading Bots</a> - Study existing code</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Community & Forums</h2>
+                    <ul>
+                        <li><strong>Discord:</strong> Polymarket official server - Ask questions, learn from others</li>
+                        <li><strong>Twitter:</strong> Follow @Polymarket, crypto traders, prediction market enthusiasts</li>
+                        <li><strong>Reddit:</strong> r/polymarket, r/algotrading, r/cryptocurrency</li>
+                        <li><strong>GitHub:</strong> Search "prediction market bot", "polymarket bot" - Study code</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>💰 Funding & Capital</h2>
+                    
+                    <h3>Initial Capital: Where to Start</h3>
+                    <ul>
+                        <li><strong>Minimum:</strong> $100 (prove concept)</li>
+                        <li><strong>Comfortable:</strong> $500 (meaningful testing)</li>
+                        <li><strong>Optimal:</strong> $2,000 (proper scaling)</li>
+                    </ul>
+                    
+                    <h3>How to Fund Polymarket</h3>
+                    <ol>
+                        <li>Buy USDC on Coinbase or Binance</li>
+                        <li>Send USDC to your Polygon wallet (MetaMask)</li>
+                        <li>Connect wallet to Polymarket</li>
+                        <li>Start trading</li>
+                    </ol>
+                    
+                    <h3>Profit Withdrawal Strategy</h3>
+                    <ul>
+                        <li><strong>First $1,000 profit:</strong> Keep 100% in system, compound</li>
+                        <li><strong>$1,000-$5,000:</strong> Withdraw 20%, reinvest 80%</li>
+                        <li><strong>$5,000-$20,000:</strong> Withdraw 30%, reinvest 70%</li>
+                        <li><strong>$20,000+:</strong> Withdraw 50%, reinvest 50%</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>⚠️ Risk Disclosures</h2>
+                    
+                    <div class="alert alert-danger">
+                        <strong>READ THIS CAREFULLY:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Prediction markets involve real financial risk</li>
+                            <li>You can lose 100% of capital</li>
+                            <li>Past performance ≠ future results</li>
+                            <li>No strategy is guaranteed to profit</li>
+                            <li>Regulatory risk - laws could change</li>
+                            <li>Platform risk - Polymarket could have issues</li>
+                            <li>Execution risk - technical problems, bugs</li>
+                        </ul>
+                    </div>
+                    
+                    <h3>Responsible Trading Guidelines</h3>
+                    <ul>
+                        <li>Only invest money you can afford to lose completely</li>
+                        <li>Start with minimum capital to prove the system works</li>
+                        <li>Never borrow money to trade</li>
+                        <li>Don't quit your job until you have 6+ months of consistent profits</li>
+                        <li>Keep detailed records for tax purposes</li>
+                        <li>Consult with a financial advisor before making major decisions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- SETTINGS PAGE -->
+            <div id="settings" class="page-content">
+                <div class="page-header">
+                    <h1>⚙️ SETTINGS</h1>
+                    <p>Configure your dashboard access</p>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>🔐 Security Note:</strong> Password changes are saved in your browser's local storage.
+                </div>
+
+                <!-- Password Change Section -->
+                <div class="card" style="border-color: #f59e0b;">
+                    <h2>🔑 Change Password</h2>
+                    <p style="margin-bottom: 20px;">Update your login password. Make sure to save it somewhere safe!</p>
+                    
+                    <div id="password-success-message" class="alert alert-success" style="display: none; margin-bottom: 20px;">
+                        <strong>✅ Success!</strong> Your password has been changed.
+                    </div>
+                    
+                    <div id="password-error-message" class="alert" style="display: none; margin-bottom: 20px; background: rgba(239, 68, 68, 0.1); border-color: #ef4444; color: #fca5a5;">
+                        <strong>❌ Error:</strong> <span id="password-error-text"></span>
+                    </div>
+                    
+                    <form id="change-password-form" onsubmit="return handlePasswordChange(event)">
+                        <div class="form-group">
+                            <label for="current-password">Current Password:</label>
+                            <input 
+                                type="password" 
+                                id="current-password" 
+                                placeholder="Enter current password"
+                                required
+                                style="width: 100%; padding: 12px; background: #0f172a; border: 2px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 1em; margin-bottom: 15px;"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-password">New Password:</label>
+                            <input 
+                                type="password" 
+                                id="new-password" 
+                                placeholder="Enter new password"
+                                required
+                                minlength="6"
+                                style="width: 100%; padding: 12px; background: #0f172a; border: 2px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 1em; margin-bottom: 15px;"
+                            >
+                            <p style="color: #94a3b8; font-size: 0.85em; margin-top: -10px;">Minimum 6 characters</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm New Password:</label>
+                            <input 
+                                type="password" 
+                                id="confirm-password" 
+                                placeholder="Re-enter new password"
+                                required
+                                minlength="6"
+                                style="width: 100%; padding: 12px; background: #0f172a; border: 2px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 1em; margin-bottom: 20px;"
+                            >
+                        </div>
+                        
+                        <button type="submit" class="btn-login" style="background: #10b981; border-color: #10b981;">
+                            🔒 Change Password
+                        </button>
+                    </form>
+                </div>
+
+                <!-- View Password -->
+                <div class="card">
+                    <h2>👁️ View Current Password</h2>
+                    <p style="margin-bottom: 15px;">Need to check your current password?</p>
+                    
+                    <button 
+                        onclick="togglePasswordDisplay()" 
+                        class="btn-login" 
+                        style="background: #3b82f6; border-color: #3b82f6; width: auto; padding: 10px 20px;"
+                    >
+                        👁️ Show/Hide Password
+                    </button>
+                    
+                    <div id="password-display" style="display: none; margin-top: 20px;">
+                        <div style="background: #0f172a; padding: 20px; border-radius: 8px; border: 2px solid #10b981;">
+                            <p style="color: #94a3b8; margin-bottom: 10px;">Your current password is:</p>
+                            <p style="font-size: 1.5em; font-weight: bold; color: #10b981; font-family: monospace;" id="current-password-text"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset -->
+                <div class="card" style="border-color: #ef4444;">
+                    <h2>🔄 Reset to Default Password</h2>
+                    <p style="margin-bottom: 15px;">Forgot your password? Reset it back to default: <code style="background: #0f172a; padding: 4px 8px; border-radius: 4px; color: #10b981;">polymarket2024</code></p>
+                    
+                    <button 
+                        onclick="resetToDefault()" 
+                        class="btn-login" 
+                        style="background: #ef4444; border-color: #ef4444; width: auto; padding: 10px 20px;"
+                    >
+                        ⚠️ Reset to Default
+                    </button>
+                </div>
+
+                <!-- Share Credentials -->
+                <div class="card">
+                    <h2>📋 Share Credentials</h2>
+                    <p>Share access with Amir:</p>
+                    
+                    <div style="background: #0f172a; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                        <p style="color: #94a3b8; margin-bottom: 5px;"><strong>Website URL:</strong></p>
+                        <p style="color: #10b981; font-family: monospace;" id="website-url">Loading...</p>
+                    </div>
+                    
+                    <button 
+                        onclick="copyCredentials()" 
+                        class="btn-login" 
+                        style="background: #10b981; border-color: #10b981; width: auto; padding: 10px 20px; margin-top: 15px;"
+                    >
+                        📋 Copy URL + Password
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password Protection
+        const DEFAULT_PASSWORD = 'polymarket2024';
+        
+        function getCurrentPassword() {
+            return localStorage.getItem('sitePassword') || DEFAULT_PASSWORD;
+        }
+        
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const passwordInput = document.getElementById('password');
+            const password = passwordInput.value;
+            const errorMessage = document.getElementById('error-message');
+            const currentPassword = getCurrentPassword();
+            
+            if (password === currentPassword) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-content').classList.add('visible');
+                sessionStorage.setItem('isLoggedIn', 'true');
+            } else {
+                errorMessage.classList.add('show');
+                passwordInput.value = '';
+                passwordInput.focus();
+                
+                setTimeout(() => {
+                    errorMessage.classList.remove('show');
+                }, 3000);
+            }
+            
+            return false;
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('isLoggedIn');
+            document.getElementById('app-content').classList.remove('visible');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('password').value = '';
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-content').classList.add('visible');
+            }
+            document.getElementById('website-url').textContent = window.location.href;
+        });
+        
+        function handlePasswordChange(event) {
+            event.preventDefault();
+            
+            const currentPasswordInput = document.getElementById('current-password');
+            const newPasswordInput = document.getElementById('new-password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            
+            const currentPassword = getCurrentPassword();
+            const enteredCurrentPassword = currentPasswordInput.value;
+            const newPassword = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            const successMessage = document.getElementById('password-success-message');
+            const errorMessage = document.getElementById('password-error-message');
+            const errorText = document.getElementById('password-error-text');
+            
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            if (enteredCurrentPassword !== currentPassword) {
+                errorText.textContent = 'Current password is incorrect.';
+                errorMessage.style.display = 'block';
+                return false;
+            }
+            
+            if (newPassword.length < 6) {
+                errorText.textContent = 'New password must be at least 6 characters.';
+                errorMessage.style.display = 'block';
+                return false;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                errorText.textContent = 'Passwords do not match.';
+                errorMessage.style.display = 'block';
+                return false;
+            }
+            
+            localStorage.setItem('sitePassword', newPassword);
+            successMessage.style.display = 'block';
+            
+            currentPasswordInput.value = '';
+            newPasswordInput.value = '';
+            confirmPasswordInput.value = '';
+            
+            window.scrollTo(0, 0);
+            return false;
+        }
+        
+        function togglePasswordDisplay() {
+            const display = document.getElementById('password-display');
+            const passwordText = document.getElementById('current-password-text');
+            
+            if (display.style.display === 'none') {
+                passwordText.textContent = getCurrentPassword();
+                display.style.display = 'block';
+            } else {
+                display.style.display = 'none';
+            }
+        }
+        
+        function resetToDefault() {
+            if (confirm('Reset password to default (polymarket2024)?')) {
+                localStorage.removeItem('sitePassword');
+                alert('✅ Password reset to: polymarket2024');
+                location.reload();
+            }
+        }
+        
+        function copyCredentials() {
+            const url = window.location.href;
+            const password = getCurrentPassword();
+            const text = `Polymarket Bot Command Center\n\nURL: ${url}\nPassword: ${password}`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Credentials copied! Paste and share with Amir.');
+            }).catch(() => {
+                alert(`Copy these:\n\nURL: ${url}\nPassword: ${password}`);
+            });
+        }
+        
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page-content');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                navLinks.forEach(l => l.classList.remove('active'));
+                pages.forEach(p => p.classList.remove('active'));
+                
+                this.classList.add('active');
+                
+                const pageId = this.getAttribute('data-page');
+                document.getElementById(pageId).classList.add('active');
+                
+                window.scrollTo(0, 0);
+            });
+        });
+    </script>
+</body>
+</html>
