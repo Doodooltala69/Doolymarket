@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymarket Exploit Manual</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        #login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+        
+        #login-screen.hidden { display: none; }
+        
+        .login-box {
+            background: #111;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.3);
+        }
+        
+        .logo {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #0f0;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #0f0;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #0f0;
+            font-size: 1em;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+        
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #0f0;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #0f0;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-login:hover {
+            background: #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+        
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #f00;
+            color: #f00;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+            font-family: monospace;
+        }
+        
+        .error-message.show { display: block; }
+        
+        #app-content { display: none; }
+        #app-content.visible { display: block; }
+        
+        .navbar {
+            background: #111;
+            border-bottom: 2px solid #0f0;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .nav-logo {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #0f0;
+            padding: 20px 0;
+            letter-spacing: 2px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 0;
+        }
+        
+        .nav-menu a {
+            display: block;
+            padding: 20px 15px;
+            color: #666;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #0f0;
+            border-bottom: 2px solid #0f0;
+        }
+        
+        .logout-btn {
+            padding: 8px 16px;
+            background: #f00;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85em;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .page-content { display: none; }
+        .page-content.active { display: block; }
+        
+        .page-header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #0f0;
+            padding-bottom: 20px;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5em;
+            color: #0f0;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        
+        .page-header p {
+            color: #666;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .section {
+            background: #111;
+            border: 1px solid #222;
+            border-left: 4px solid #0f0;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        
+        .section h2 {
+            color: #0f0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .section h3 {
+            color: #fff;
+            margin: 25px 0 15px 0;
+            font-size: 1.3em;
+        }
+        
+        .section h4 {
+            color: #888;
+            margin: 20px 0 10px 0;
+            font-size: 1.1em;
+        }
+        
+        .section p {
+            color: #aaa;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+        
+        .section ul,
+        .section ol {
+            margin: 15px 0 15px 30px;
+            color: #aaa;
+        }
+        
+        .section li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+        
+        .alert {
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            border-left: 4px solid;
+        }
+        
+        .alert-warning {
+            background: rgba(255, 165, 0, 0.1);
+            border-color: #ffa500;
+            color: #ffa500;
+        }
+        
+        .alert-success {
+            background: rgba(0, 255, 0, 0.1);
+            border-color: #0f0;
+            color: #0f0;
+        }
+        
+        .alert-danger {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: #f00;
+            color: #f00;
+        }
+        
+        .highlight {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .highlight h3 {
+            color: #0f0 !important;
+        }
+        
+        .code-block {
+            background: #000;
+            border: 1px solid #333;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            color: #0f0;
+            font-size: 0.9em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th {
+            background: #0f0;
+            color: #000;
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #222;
+            color: #aaa;
+        }
+        
+        tr:hover {
+            background: rgba(0, 255, 0, 0.05);
+        }
+        
+        strong {
+            color: #0f0;
+            font-weight: 700;
+        }
+        
+        a {
+            color: #0f0;
+            text-decoration: none;
+            border-bottom: 1px dotted #0f0;
+        }
+        
+        a:hover {
+            color: #00ff00;
+            border-bottom: 1px solid #00ff00;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .nav-menu { flex-wrap: wrap; }
+            .nav-menu a { padding: 15px 10px; font-size: 0.75em; }
+        }
+    </style>
+</head>
+<body>
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="logo">⚡</div>
+            <h1>ACCESS RESTRICTED</h1>
+            <p class="subtitle">Authorization Required</p>
+            
+            <div class="error-message" id="error-message">
+                ACCESS DENIED
+            </div>
+            
+            <form onsubmit="return handleLogin(event)">
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="ENTER ACCESS CODE"
+                    required
+                >
+                <button type="submit" class="btn-login">AUTHENTICATE</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-content">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">⚡ POLYMARKET EXPLOIT MANUAL</div>
+                <ul class="nav-menu">
+                    <li><a href="#" class="nav-link active" data-page="mission">MISSION</a></li>
+                    <li><a href="#" class="nav-link" data-page="intel">INTELLIGENCE</a></li>
+                    <li><a href="#" class="nav-link" data-page="strategies">STRATEGIES</a></li>
+                    <li><a href="#" class="nav-link" data-page="execution">EXECUTION</a></li>
+                    <li><a href="#" class="nav-link" data-page="tools">TOOLS</a></li>
+                    <li><a href="#" class="nav-link" data-page="settings">SETTINGS</a></li>
+                </ul>
+                <button class="logout-btn" onclick="logout()">EXIT</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <!-- MISSION PAGE -->
+            <div id="mission" class="page-content active">
+                <div class="page-header">
+                    <h1>THE MISSION</h1>
+                    <p>$400 → $300,000+ in the shortest time possible</p>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>OBJECTIVE:</strong> Exploit Polymarket's inefficiencies to compound capital at maximum velocity. No slow growth. No safe plays. Pure execution.
+                </div>
+
+                <div class="section">
+                    <h2>THE REALITY</h2>
+                    <p>Polymarket is a prediction market with <strong>exploitable inefficiencies</strong>. People are turning $500 into $500,000 in weeks. This isn't luck - it's systematic exploitation of:</p>
+                    
+                    <ul>
+                        <li><strong>Information Lag:</strong> Markets take 3-10 seconds to update. You act in < 1 second. Free money.</li>
+                        <li><strong>Mispricing:</strong> YES + NO ≠ $1 happens more than it should. Guaranteed profit when it does.</li>
+                        <li><strong>Crowd Stupidity:</strong> People panic, overpay, and misprice events. You stay cold and capitalize.</li>
+                        <li><strong>Cross-Platform Arbitrage:</strong> Same event, different prices. Buy low, sell high, lock profit.</li>
+                        <li><strong>News Edges:</strong> Twitter/news breaks before markets adjust. 2-5 minute windows for massive gains.</li>
+                    </ul>
+
+                    <h3>THE MATH</h3>
+                    <p>This isn't about percentages. It's about <strong>multipliers</strong>.</p>
+                    
+                    <div class="code-block">
+Starting Capital: $400
+
+Win 1:  $400 → $800   (2x)
+Win 2:  $800 → $1,600  (2x)  
+Win 3:  $1,600 → $3,200 (2x)
+Win 4:  $3,200 → $6,400 (2x)
+Win 5:  $6,400 → $12,800 (2x)
+Win 6:  $12,800 → $25,600 (2x)
+Win 7:  $25,600 → $51,200 (2x)
+Win 8:  $51,200 → $102,400 (2x)
+Win 9:  $102,400 → $204,800 (2x)
+Win 10: $204,800 → $409,600 (2x)
+
+10 DOUBLES = $400 TO $409K
+
+Even with 1.5x average:
+10 trades = $400 to $59,000
+15 trades = $400 to $213,000
+                    </div>
+                    
+                    <p><strong>YOU DON'T NEED HIGH WIN RATE. YOU NEED HIGH MULTIPLIER OPPORTUNITIES.</strong></p>
+                </div>
+
+                <div class="section">
+                    <h2>THE EDGES</h2>
+                    
+                    <h3>1. SPEED ARBITRAGE (Highest ROI)</h3>
+                    <p>Real-world events happen. Polymarket takes 3-10 seconds to update prices. You have real-time data. You trade before they know what happened.</p>
+                    <p><strong>Example:</strong> BTC crosses $100k at 11:59:58 PM. Market "BTC > $100k today" still at 40 cents. You buy. Instant 2.5x when market closes at midnight.</p>
+                    <p><strong>Frequency:</strong> 5-10 opportunities per day on crypto markets alone</p>
+                    <p><strong>Typical Return:</strong> 50-300% per trade</p>
+
+                    <h3>2. BREAKING NEWS ARBITRAGE</h3>
+                    <p>News breaks on Twitter. Takes 2-10 minutes to hit mainstream. Polymarket doesn't react for 1-5 minutes. You're in and out before the crowd.</p>
+                    <p><strong>Example:</strong> CEO resigns (tweet at 3:15 PM). Market "Company hits Q4 targets" still at 70 cents YES. You buy NO at 30 cents. News spreads, price crashes, you sell NO at 65 cents. 2.16x in 10 minutes.</p>
+                    <p><strong>Frequency:</strong> 2-5 major events per week</p>
+                    <p><strong>Typical Return:</strong> 100-500% per trade</p>
+
+                    <h3>3. MATHEMATICAL ARBITRAGE</h3>
+                    <p>Sometimes YES + NO < $1. Pure math error. Buy both sides. Guaranteed profit.</p>
+                    <p><strong>Example:</strong> YES at 46 cents, NO at 48 cents. Total: 94 cents. Buy both. One pays $1. Profit: 6 cents guaranteed = 6.4% risk-free.</p>
+                    <p><strong>Frequency:</strong> 1-3 opportunities per day</p>
+                    <p><strong>Typical Return:</strong> 3-15% per trade (but zero risk)</p>
+
+                    <h3>4. VOLATILITY EXPLOITATION</h3>
+                    <p>Markets panic. Prices swing 30-50% in minutes. You buy the panic, sell the recovery.</p>
+                    <p><strong>Example:</strong> Election market. Bad poll drops. Price crashes from 65 to 35 in 5 minutes. You buy at 35. Good poll 2 hours later. Price at 55. You sell. 1.57x return.</p>
+                    <p><strong>Frequency:</strong> Daily during election cycles, weekly otherwise</p>
+                    <p><strong>Typical Return:</strong> 30-100% per trade</p>
+                </div>
+
+                <div class="section">
+                    <h2>COMPOUNDING VELOCITY</h2>
+                    
+                    <p>The goal isn't steady growth. It's <strong>exponential multiplication</strong>.</p>
+                    
+                    <h3>Week 1: Prove The Edges</h3>
+                    <ul>
+                        <li>$400 capital</li>
+                        <li>3-5 trades</li>
+                        <li>Target: Validate one edge works</li>
+                        <li>If profitable: Move to Week 2</li>
+                        <li>If not: Fix execution, repeat Week 1</li>
+                    </ul>
+
+                    <h3>Week 2-3: Scale Winning Edge</h3>
+                    <ul>
+                        <li>Whatever edge worked in Week 1, hit it HARD</li>
+                        <li>10-20 trades on that same edge</li>
+                        <li>Target: 3-5x capital ($400 → $1,200-$2,000)</li>
+                    </ul>
+
+                    <h3>Week 4-6: Add Second Edge</h3>
+                    <ul>
+                        <li>Now you have $1,200-$2,000</li>
+                        <li>Keep exploiting Edge #1</li>
+                        <li>Add one more edge type</li>
+                        <li>Target: 5-10x total ($400 → $2,000-$4,000)</li>
+                    </ul>
+
+                    <h3>Week 7-12: Multi-Edge Assault</h3>
+                    <ul>
+                        <li>Now you have $2,000-$4,000</li>
+                        <li>Run all profitable edges simultaneously</li>
+                        <li>20-40 trades per week</li>
+                        <li>Target: 50-100x total ($400 → $20,000-$40,000)</li>
+                    </ul>
+
+                    <h3>Month 4+: Maximum Extraction</h3>
+                    <ul>
+                        <li>$20,000-$40,000 capital</li>
+                        <li>Automated systems running 24/7</li>
+                        <li>Multiple markets, multiple edges</li>
+                        <li>Target: 500-1000x total ($400 → $200,000-$400,000)</li>
+                    </ul>
+
+                    <div class="highlight">
+                        <h3>KEY PRINCIPLE: ASYMMETRIC BETS</h3>
+                        <p>You're not looking for 55% win rate with 10% gains. You're looking for:</p>
+                        <ul>
+                            <li>Trades where you can <strong>2-5x your money if right</strong></li>
+                            <li>Trades where you <strong>lose 50-100% if wrong</strong></li>
+                            <li>You only need to be right <strong>30-40% of the time</strong> to make massive money</li>
+                        </ul>
+                        <p><strong>Example:</strong> 10 trades, $1,000 each. 3 win at 3x ($9,000). 7 lose ($7,000 lost). Net: $2,000 profit. Only 30% win rate but still profitable.</p>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger">
+                    <strong>WARNING:</strong> This is not "safe." This is aggressive capital deployment with high risk and high reward. You can lose everything. But that's the game when you're trying to turn $400 into $300k.
+                </div>
+            </div>
+
+            <!-- INTELLIGENCE PAGE -->
+            <div id="intel" class="page-content">
+                <div class="page-header">
+                    <h1>INTELLIGENCE GATHERING</h1>
+                    <p>Information asymmetry = money</p>
+                </div>
+
+                <div class="section">
+                    <h2>FOR PAX: RESEARCH & ANALYSIS</h2>
+                    
+                    <h3>DAILY INTELLIGENCE ROUTINE (60-90 minutes)</h3>
+                    
+                    <h4>Morning Scan (20 minutes)</h4>
+                    <ol>
+                        <li>Open Polymarket → Sort by volume → Check top 20 markets</li>
+                        <li>Look for: Crypto threshold markets, Time-sensitive events, News-driven markets</li>
+                        <li>Document any mispricing or opportunities in spreadsheet</li>
+                        <li>Check Kalshi/PredictIt for same markets → Note price differences > 5%</li>
+                    </ol>
+
+                    <h4>Midday News Monitor (20 minutes)</h4>
+                    <ol>
+                        <li>Twitter: Check verified accounts in politics, finance, crypto, sports</li>
+                        <li>Set up TweetDeck columns for: Breaking news, Company announcements, Political events</li>
+                        <li>Google News: Scan headlines for market-moving events</li>
+                        <li>Match breaking stories to Polymarket markets</li>
+                    </ol>
+
+                    <h4>Evening Analysis (30 minutes)</h4>
+                    <ol>
+                        <li>Review the day: What opportunities appeared? What did you miss?</li>
+                        <li>Crypto markets: Study which threshold markets have most volume</li>
+                        <li>Tomorrow prep: What events are scheduled? Elections? Earnings? Data releases?</li>
+                        <li>Create watch list for next day</li>
+                    </ol>
+
+                    <h3>WHAT TO LOOK FOR</h3>
+                    
+                    <h4>High-Probability Opportunities</h4>
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Where To Find</th>
+                            <th>Trigger</th>
+                            <th>Action Speed</th>
+                        </tr>
+                        <tr>
+                            <td>Crypto Threshold</td>
+                            <td>Polymarket > Crypto category</td>
+                            <td>Price crosses threshold in final 60 seconds</td>
+                            <td>< 5 seconds</td>
+                        </tr>
+                        <tr>
+                            <td>CEO Changes</td>
+                            <td>Twitter verified accounts</td>
+                            <td>Resignation/appointment announcement</td>
+                            <td>< 2 minutes</td>
+                        </tr>
+                        <tr>
+                            <td>Election Swings</td>
+                            <td>FiveThirtyEight, poll releases</td>
+                            <td>Major poll shows big shift</td>
+                            <td>< 5 minutes</td>
+                        </tr>
+                        <tr>
+                            <td>Sports Injuries</td>
+                            <td>Team Twitter, ESPN</td>
+                            <td>Key player ruled out</td>
+                            <td>< 3 minutes</td>
+                        </tr>
+                        <tr>
+                            <td>M&A Announcements</td>
+                            <td>Bloomberg, Reuters</td>
+                            <td>Acquisition announced</td>
+                            <td>< 2 minutes</td>
+                        </tr>
+                    </table>
+
+                    <h3>MARKET SELECTION CRITERIA</h3>
+                    <p>Not all markets are worth your time. Focus on:</p>
+                    <ul>
+                        <li><strong>High Volume:</strong> > $50k traded (easier to enter/exit)</li>
+                        <li><strong>Binary Outcomes:</strong> Clear YES/NO (no ambiguity)</li>
+                        <li><strong>Near-Term Resolution:</strong> Resolves within 7 days (fast capital turnover)</li>
+                        <li><strong>Verifiable:</strong> Resolution based on public data (no disputes)</li>
+                        <li><strong>Volatile:</strong> Prices move 20%+ regularly (more opportunities)</li>
+                    </ul>
+
+                    <h3>EDGE VALIDATION PROCESS</h3>
+                    <p>Before committing capital, validate your edge:</p>
+                    <ol>
+                        <li><strong>Observe:</strong> Watch the market for 1-2 days without trading</li>
+                        <li><strong>Document:</strong> Note when opportunities appear, how long they last</li>
+                        <li><strong>Paper Trade:</strong> Track what you WOULD have done, calculate results</li>
+                        <li><strong>Small Test:</strong> Trade with 10-20% of capital on 3-5 opportunities</li>
+                        <li><strong>Full Deploy:</strong> If profitable, scale to full position sizes</li>
+                    </ol>
+
+                    <div class="highlight">
+                        <h3>FINDING HIDDEN EDGES</h3>
+                        <p>The best edges are the ones nobody else sees yet. Look for:</p>
+                        <ul>
+                            <li><strong>New Market Categories:</strong> Polymarket adds new types of markets. Early adopters have edge.</li>
+                            <li><strong>Low-Volume Markets:</strong> Sometimes hidden gems with huge mispricings</li>
+                            <li><strong>Correlated Markets:</strong> If Market A moves, Market B should move. When it doesn't = opportunity.</li>
+                            <li><strong>Time-Zone Arbitrage:</strong> Asian/European markets resolve while US is asleep. Set alarms.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>FOR AMIR: TECHNICAL INTELLIGENCE</h2>
+                    
+                    <h3>DATA COLLECTION INFRASTRUCTURE</h3>
+                    
+                    <p>Your job is to give Pax superhuman speed and information access.</p>
+
+                    <h4>Real-Time Data Feeds You Need</h4>
+                    <ol>
+                        <li><strong>Polymarket WebSocket:</strong> All market updates in real-time</li>
+                        <li><strong>Binance/Coinbase WebSocket:</strong> BTC/ETH/crypto prices (< 100ms latency)</li>
+                        <li><strong>Twitter Streaming API:</strong> Filtered by keywords + verified accounts</li>
+                        <li><strong>News APIs:</strong> Reuters, Bloomberg, or NewsAPI.org</li>
+                        <li><strong>Kalshi REST API:</strong> Competing market prices (poll every 5 seconds)</li>
+                    </ol>
+
+                    <h4>What To Build First</h4>
+                    
+                    <div class="code-block">
+# Priority 1: Market Scanner
+- Fetches all Polymarket markets every 10 seconds
+- Checks for YES + NO price sum
+- Alerts when sum < $0.98
+- Logs all opportunities to database
+
+# Priority 2: Crypto Price Monitor  
+- WebSocket to Binance for BTC/ETH
+- Tracks all Polymarket crypto threshold markets
+- Compares real price vs market price
+- Alerts when mismatch detected in final 60 seconds
+
+# Priority 3: News Scanner
+- Twitter stream for breaking news keywords
+- Match news to relevant Polymarket markets
+- Calculate estimated impact (bullish/bearish)
+- Alert with confidence score
+
+# Priority 4: Execution Engine
+- Rapid order placement (< 1 second)
+- Position sizing based on confidence
+- Transaction monitoring
+- Error recovery
+                    </div>
+
+                    <h3>CRITICAL: SPEED OPTIMIZATION</h3>
+                    <p>Every millisecond matters. Optimize:</p>
+                    <ul>
+                        <li><strong>Network Latency:</strong> Deploy on AWS/DO server closest to Polymarket servers</li>
+                        <li><strong>Code Efficiency:</strong> Use async Python, avoid blocking operations</li>
+                        <li><strong>Data Storage:</strong> Redis for hot data (< 1ms access), PostgreSQL for history</li>
+                        <li><strong>API Calls:</strong> WebSocket > REST for real-time data</li>
+                        <li><strong>Order Execution:</strong> Pre-sign transactions, optimize gas, retry logic</li>
+                    </ul>
+
+                    <h3>MONITORING & LOGGING</h3>
+                    <p>You need to know EVERYTHING that happens:</p>
+                    <ul>
+                        <li>Every opportunity detected → Log with timestamp, prices, expected profit</li>
+                        <li>Every trade executed → Log entry price, exit price, actual profit, execution time</li>
+                        <li>Every error → Log error type, context, how it was handled</li>
+                        <li>System health → CPU, memory, network latency, API response times</li>
+                    </ul>
+
+                    <p><strong>Send Discord/Slack alerts for:</strong></p>
+                    <ul>
+                        <li>Every trade executed</li>
+                        <li>Any error that stops trading</li>
+                        <li>Daily P&L summary</li>
+                        <li>High-confidence opportunities detected</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- STRATEGIES PAGE -->
+            <div id="strategies" class="page-content">
+                <div class="page-header">
+                    <h1>EXPLOITATION STRATEGIES</h1>
+                    <p>Proven methods to extract maximum profit</p>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>EXECUTION ORDER:</strong> Start with Strategy 1. Once profitable, add Strategy 2. Then 3. Then 4. Don't try to do everything at once.
+                </div>
+
+                <div class="section">
+                    <h2>STRATEGY 1: CRYPTO PRICE LAG EXPLOITATION</h2>
+                    <p><strong>Why This First:</strong> Highest return per trade. Clear entry/exit. Happens multiple times per day.</p>
+                    
+                    <h3>THE SETUP</h3>
+                    <p>Polymarket has markets like "Will BTC close above $100,000 today?" The market closes at midnight. Real crypto prices update in milliseconds. Polymarket prices update every 3-10 seconds. <strong>You have real-time data. They don't.</strong></p>
+
+                    <h3>THE EXECUTION</h3>
+                    <ol>
+                        <li><strong>Monitor:</strong> Track all crypto threshold markets (BTC > $X, ETH > $Y, etc)</li>
+                        <li><strong>Watch:</strong> In the final 60 seconds before market closes, watch BOTH real price and Polymarket price</li>
+                        <li><strong>Detect:</strong> When real price crosses threshold but Polymarket hasn't adjusted yet</li>
+                        <li><strong>Execute:</strong> Buy the correct side immediately (< 1 second)</li>
+                        <li><strong>Wait:</strong> Market closes, you win</li>
+                    </ol>
+
+                    <h3>REAL EXAMPLE</h3>
+                    <div class="code-block">
+Market: "Will BTC close above $100,000 on Dec 31?"
+Closes: Midnight EST
+
+11:59:00 PM - Real BTC: $99,850 | PM YES price: $0.38
+11:59:30 PM - Real BTC: $99,920 | PM YES price: $0.41  
+11:59:50 PM - Real BTC: $100,280 | PM YES price: $0.44 ← BUY HERE
+12:00:00 AM - Market Closes | Real BTC: $100,310
+
+You bought YES at $0.44
+You win $1.00
+Profit: $0.56 per share = 127% return
+
+With $1,000: You make $1,270 in 10 seconds
+                    </div>
+
+                    <h3>FREQUENCY & SIZING</h3>
+                    <ul>
+                        <li><strong>Opportunities:</strong> 5-15 per day (BTC, ETH, SOL, various thresholds)</li>
+                        <li><strong>Win Rate:</strong> 85-95% (you KNOW the outcome)</li>
+                        <li><strong>Avg Return:</strong> 50-300% per trade</li>
+                        <li><strong>Position Size:</strong> 30-50% of capital (high confidence)</li>
+                        <li><strong>Time to Profit:</strong> Seconds to minutes</li>
+                    </ul>
+
+                    <h3>CRITICAL SUCCESS FACTORS</h3>
+                    <ul>
+                        <li><strong>Speed:</strong> Must execute in < 2 seconds or opportunity disappears</li>
+                        <li><strong>Timing:</strong> Only trade in final 60 seconds (earlier is too unpredictable)</li>
+                        <li><strong>Verification:</strong> Double-check real price on 2+ exchanges before trading</li>
+                        <li><strong>Gas:</strong> Have high gas settings so transaction confirms fast</li>
+                    </ul>
+
+                    <div class="highlight">
+                        <h3>SCALING THIS STRATEGY</h3>
+                        <p>Once you prove this works:</p>
+                        <ul>
+                            <li>Track ALL crypto markets (10-20 different thresholds)</li>
+                            <li>Set up automated monitoring (Amir builds alerts)</li>
+                            <li>Scale position size to 50-80% of capital per trade</li>
+                            <li>Run this EVERY SINGLE DAY</li>
+                        </ul>
+                        <p><strong>Realistic Goal:</strong> 2-3 successful trades per day = 200-400% daily growth rate on deployed capital</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>STRATEGY 2: BREAKING NEWS ARBITRAGE</h2>
+                    <p><strong>Why This Second:</strong> Very high returns. Multiple opportunities per week. Requires more skill but still systematic.</p>
+                    
+                    <h3>THE SETUP</h3>
+                    <p>Major news breaks on Twitter or news wires BEFORE it hits mainstream. Polymarket users are mostly casual - they don't see news until 2-10 minutes after it breaks. <strong>You see it immediately.</strong></p>
+
+                    <h3>NEWS TYPES THAT MOVE MARKETS</h3>
+                    <table>
+                        <tr>
+                            <th>Event Type</th>
+                            <th>Sources</th>
+                            <th>Market Impact</th>
+                            <th>Reaction Time</th>
+                        </tr>
+                        <tr>
+                            <td>CEO Resignation</td>
+                            <td>Company Twitter, insider reporters</td>
+                            <td>-20 to -50% on company bets</td>
+                            <td>2-5 min before market adjusts</td>
+                        </tr>
+                        <tr>
+                            <td>Election Polls</td>
+                            <td>Major pollsters, news orgs</td>
+                            <td>10-30% price swing</td>
+                            <td>3-10 min before market adjusts</td>
+                        </tr>
+                        <tr>
+                            <td>M&A Announcements</td>
+                            <td>Bloomberg, Reuters</td>
+                            <td>20-60% on related markets</td>
+                            <td>1-3 min before market adjusts</td>
+                        </tr>
+                        <tr>
+                            <td>Player Injuries (Sports)</td>
+                            <td>Team Twitter, Woj/Schefter</td>
+                            <td>15-40% on game outcomes</td>
+                            <td>2-8 min before market adjusts</td>
+                        </tr>
+                        <tr>
+                            <td>Product Launches</td>
+                            <td>Company announcements</td>
+                            <td>10-30% on success metrics</td>
+                            <td>5-15 min before market adjusts</td>
+                        </tr>
+                    </table>
+
+                    <h3>THE EXECUTION</h3>
+                    <ol>
+                        <li><strong>Monitor:</strong> Twitter lists, news APIs, RSS feeds (Amir automates this)</li>
+                        <li><strong>Detect:</strong> NLP or manual scan for market-moving events</li>
+                        <li><strong>Match:</strong> Find Polymarket market affected by this news</li>
+                        <li><strong>Analyze:</strong> Will this move price up or down? By how much?</li>
+                        <li><strong>Execute:</strong> Trade immediately if high confidence (> 70%)</li>
+                        <li><strong>Monitor:</strong> Watch price movement</li>
+                        <li><strong>Exit:</strong> Sell once price reaches expected level (usually 5-30 min)</li>
+                    </ol>
+
+                    <h3>REAL EXAMPLE</h3>
+                    <div class="code-block">
+Market: "Will TechCorp hit Q4 revenue targets?"
+Current Price: YES @ $0.72
+
+2:14 PM: TechCorp CEO tweets resignation
+2:15 PM: You see tweet, buy NO @ $0.28
+2:22 PM: News starts spreading on Twitter
+2:28 PM: Bloomberg picks up the story  
+2:35 PM: Polymarket reacts, NO price at $0.63
+2:40 PM: You sell NO @ $0.63
+
+Bought at: $0.28
+Sold at: $0.63
+Profit: $0.35 per share = 125% return in 26 minutes
+
+With $2,000: You make $2,500 profit
+                    </div>
+
+                    <h3>FREQUENCY & SIZING</h3>
+                    <ul>
+                        <li><strong>Opportunities:</strong> 2-8 per week (varies by news cycle)</li>
+                        <li><strong>Win Rate:</strong> 60-75% (some news doesn't move market as expected)</li>
+                        <li><strong>Avg Return:</strong> 80-250% per winning trade</li>
+                        <li><strong>Position Size:</strong> 20-40% of capital (moderate confidence)</li>
+                        <li><strong>Time to Profit:</strong> 5-60 minutes typically</li>
+                    </ul>
+
+                    <h3>RISK MANAGEMENT</h3>
+                    <ul>
+                        <li><strong>Only trade HIGH IMPACT news:</strong> CEO changes, major deals, critical injuries</li>
+                        <li><strong>Verify source:</strong> Must be verified account or major news org</li>
+                        <li><strong>Check market liquidity:</strong> Make sure you can exit if wrong</li>
+                        <li><strong>Set mental stop loss:</strong> If price moves AGAINST you by 20%, exit</li>
+                        <li><strong>Don't chase:</strong> If you're 5+ minutes late, skip it</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h2>STRATEGY 3: MATHEMATICAL ARBITRAGE</h2>
+                    <p><strong>Why This Third:</strong> Zero risk. Guaranteed profit. But small returns and rare opportunities.</p>
+                    
+                    <h3>THE SETUP</h3>
+                    <p>In a binary market, YES + NO should equal $1.00 (plus fees). Sometimes it doesn't. When YES + NO + fees < $1.00, you can buy BOTH sides and guarantee profit.</p>
+
+                    <h3>THE MATH</h3>
+                    <div class="code-block">
+Market: "Will event happen?"
+YES price: $0.46
+NO price: $0.48
+Polymarket fee: ~2%
+
+Total cost: $0.46 + $0.48 = $0.94
+With fees: $0.94 × 1.02 = $0.9588
+
+One side MUST pay $1.00
+
+Profit: $1.00 - $0.9588 = $0.0412 per dollar
+Return: 4.12% risk-free
+                    </div>
+
+                    <h3>THE EXECUTION</h3>
+                    <ol>
+                        <li><strong>Scan:</strong> Check all markets for YES + NO price</li>
+                        <li><strong>Calculate:</strong> Add prices + fees</li>
+                        <li><strong>Detect:</strong> If total < $0.98, opportunity exists</li>
+                        <li><strong>Execute:</strong> Buy BOTH YES and NO simultaneously</li>
+                        <li><strong>Wait:</strong> Market resolves, you get paid</li>
+                    </ol>
+
+                    <h3>FREQUENCY & SIZING</h3>
+                    <ul>
+                        <li><strong>Opportunities:</strong> 1-4 per day</li>
+                        <li><strong>Win Rate:</strong> 100% (literally guaranteed)</li>
+                        <li><strong>Avg Return:</strong> 2-8% per trade</li>
+                        <li><strong>Position Size:</strong> 80-100% of available capital (zero risk)</li>
+                        <li><strong>Time to Profit:</strong> Hours to days (until market resolves)</li>
+                    </ul>
+
+                    <div class="highlight">
+                        <h3>USE THIS AS PARKING LOT</h3>
+                        <p>When you're not actively trading Strategy 1 or 2, park your capital here. It's earning 2-8% risk-free while you wait for high-ROI opportunities.</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>STRATEGY 4: VOLATILITY SCALPING</h2>
+                    <p><strong>Why This Fourth:</strong> Requires experience. Higher risk. But can produce 50-150% returns repeatedly.</p>
+                    
+                    <h3>THE SETUP</h3>
+                    <p>Markets panic. A bad poll drops, price crashes 30% in 5 minutes. You buy the panic. Price recovers 20-40% over next few hours. You sell. Repeat.</p>
+
+                    <h3>PATTERN RECOGNITION</h3>
+                    <p><strong>Classic Panic-Recovery Pattern:</strong></p>
+                    <ol>
+                        <li>Market is stable at X price</li>
+                        <li>Bad news / uncertainty → Price crashes 20-50%</li>
+                        <li>Panic sellers exit → Price at bottom</li>
+                        <li>Rational buyers enter → Price recovers 30-70% of the drop</li>
+                        <li>You buy at bottom, sell on recovery</li>
+                    </ol>
+
+                    <h3>REAL EXAMPLE</h3>
+                    <div class="code-block">
+Market: "Candidate A wins election"
+Normal price: $0.62
+
+10:00 AM: Bad poll released
+10:05 AM: Panic selling, price at $0.34 ← BUY HERE
+12:30 PM: Market stabilizes at $0.52 ← SELL HERE
+
+Bought at: $0.34
+Sold at: $0.52
+Profit: $0.18 per share = 53% return in 2.5 hours
+
+With $5,000: You make $2,650 profit
+                    </div>
+
+                    <h3>HOW TO IDENTIFY BOTTOMS</h3>
+                    <ul>
+                        <li><strong>Volume spike:</strong> Lots of trades happening (panic phase)</li>
+                        <li><strong>Price stabilizes:</strong> Stops dropping, bounces slightly</li>
+                        <li><strong>Orderbook depth:</strong> Buy orders start appearing</li>
+                        <li><strong>Time:</strong> Usually bottoms 3-10 minutes after bad news</li>
+                    </ul>
+
+                    <h3>RISK MANAGEMENT</h3>
+                    <ul>
+                        <li><strong>Only trade 15-25% of capital</strong> (this can go wrong)</li>
+                        <li><strong>Set stop loss:</strong> If price drops another 10% after you buy, exit</li>
+                        <li><strong>Take profits early:</strong> Don't wait for full recovery, sell at 40-60% bounce</li>
+                        <li><strong>Don't catch falling knives:</strong> Wait for price to stabilize before buying</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>PORTFOLIO APPROACH:</strong> Run Strategy 1 (crypto lag) + Strategy 2 (news) as primary profit drivers. Use Strategy 3 (math arb) as passive income. Add Strategy 4 (volatility) only when you have experience and spare capital.
+                </div>
+            </div>
+
+            <!-- EXECUTION PAGE -->
+            <div id="execution" class="page-content">
+                <div class="page-header">
+                    <h1>EXECUTION PROTOCOL</h1>
+                    <p>How to actually do this</p>
+                </div>
+
+                <div class="section">
+                    <h2>WEEK 1: VALIDATION</h2>
+                    <p><strong>Capital:</strong> $400</p>
+                    <p><strong>Goal:</strong> Prove ONE edge works</p>
+                    
+                    <h3>PAX'S TASKS</h3>
+                    <ol>
+                        <li>Study crypto lag strategy documentation (above)</li>
+                        <li>Find 3 crypto threshold markets on Polymarket</li>
+                        <li>Track them manually for 2-3 days WITHOUT trading</li>
+                        <li>Document every time you SEE the lag opportunity</li>
+                        <li>Calculate what profit you WOULD have made</li>
+                        <li>If profitable on paper, execute 2-3 REAL trades</li>
+                    </ol>
+
+                    <h3>AMIR'S TASKS</h3>
+                    <ol>
+                        <li>Set up Polymarket API access</li>
+                        <li>Connect Binance WebSocket for BTC/ETH prices</li>
+                        <li>Build simple script that shows BOTH prices side-by-side</li>
+                        <li>Test that you can fetch market data in < 500ms</li>
+                        <li>Build basic Discord alert system</li>
+                    </ol>
+
+                    <h3>SUCCESS CRITERIA</h3>
+                    <ul>
+                        <li>✓ Complete 2-3 profitable trades (even if small profit)</li>
+                        <li>✓ Execution time < 5 seconds from decision to order</li>
+                        <li>✓ No major technical issues</li>
+                    </ul>
+
+                    <p><strong>IF YOU FAIL:</strong> Fix what went wrong. Repeat Week 1. DO NOT move forward until this works.</p>
+                </div>
+
+                <div class="section">
+                    <h2>WEEK 2-3: EXPLOITATION</h2>
+                    <p><strong>Capital:</strong> $400-800 (whatever you have after Week 1)</p>
+                    <p><strong>Goal:</strong> Hit the profitable edge HARD</p>
+                    
+                    <h3>PAX'S TASKS</h3>
+                    <ol>
+                        <li>Monitor crypto markets 12-16 hours per day</li>
+                        <li>Execute 10-20 trades on the crypto lag strategy</li>
+                        <li>Track: Win rate, avg return, execution time, errors</li>
+                        <li>Refine: What times of day are best? Which markets most profitable?</li>
+                    </ol>
+
+                    <h3>AMIR'S TASKS</h3>
+                    <ol>
+                        <li>Automate opportunity detection (alerts when lag detected)</li>
+                        <li>Optimize execution speed (target < 2 seconds)</li>
+                        <li>Build position sizing calculator</li>
+                        <li>Create basic dashboard showing: trades, P&L, win rate</li>
+                    </ol>
+
+                    <h3>SUCCESS CRITERIA</h3>
+                    <ul>
+                        <li>✓ 10+ trades executed</li>
+                        <li>✓ Win rate > 65%</li>
+                        <li>✓ Capital grown 2-5x ($400 → $800-2,000)</li>
+                    </ul>
+
+                    <p><strong>IF HITTING TARGET:</strong> Move to Week 4</p>
+                    <p><strong>IF NOT:</strong> Repeat Week 2-3 until profitable</p>
+                </div>
+
+                <div class="section">
+                    <h2>WEEK 4-6: EXPANSION</h2>
+                    <p><strong>Capital:</strong> $800-2,000+</p>
+                    <p><strong>Goal:</strong> Add second edge (News Arbitrage)</p>
+                    
+                    <h3>PAX'S TASKS</h3>
+                    <ol>
+                        <li>Continue running crypto lag strategy</li>
+                        <li>Start monitoring Twitter/news for breaking events</li>
+                        <li>Execute 5-10 news arbitrage trades</li>
+                        <li>Document which news types work best</li>
+                    </ol>
+
+                    <h3>AMIR'S TASKS</h3>
+                    <ol>
+                        <li>Add Twitter monitoring (even if manual at first)</li>
+                        <li>Build news-to-market matching system</li>
+                        <li>Improve execution engine for both strategies</li>
+                        <li>Add risk management (position sizing limits)</li>
+                    </ol>
+
+                    <h3>SUCCESS CRITERIA</h3>
+                    <ul>
+                        <li>✓ Running 2 strategies simultaneously</li>
+                        <li>✓ 20-30 total trades across both strategies</li>
+                        <li>✓ Capital grown 5-10x total ($400 → $2,000-4,000)</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h2>WEEK 7-12: SCALING</h2>
+                    <p><strong>Capital:</strong> $2,000-10,000+</p>
+                    <p><strong>Goal:</strong> Maximum extraction</p>
+                    
+                    <h3>PAX'S TASKS</h3>
+                    <ol>
+                        <li>Run all profitable strategies</li>
+                        <li>30-50 trades per week</li>
+                        <li>Start testing volatility scalping</li>
+                        <li>Research new edge opportunities</li>
+                    </ol>
+
+                    <h3>AMIR'S TASKS</h3>
+                    <ol>
+                        <li>Fully automate crypto lag detection</li>
+                        <li>Deploy to cloud server (run 24/7)</li>
+                        <li>Add all monitoring and alerts</li>
+                        <li>Build risk management system</li>
+                    </ol>
+
+                    <h3>SUCCESS CRITERIA</h3>
+                    <ul>
+                        <li>✓ Capital grown 50-100x total ($400 → $20,000-40,000)</li>
+                        <li>✓ Consistent profitability (3+ weeks in a row)</li>
+                        <li>✓ Automated systems handling 70%+ of execution</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h2>MONTH 4+: DOMINANCE</h2>
+                    <p><strong>Capital:</strong> $20,000-100,000+</p>
+                    <p><strong>Goal:</strong> Hit the targets ($300k+)</p>
+                    
+                    <h3>AT THIS STAGE</h3>
+                    <ul>
+                        <li>All strategies running simultaneously</li>
+                        <li>90%+ automated</li>
+                        <li>40-80 trades per week</li>
+                        <li>Multiple markets, multiple edges</li>
+                        <li>Aggressive position sizing (50-80% of capital per high-confidence trade)</li>
+                    </ul>
+
+                    <h3>KEY METRICS TO TRACK</h3>
+                    <table>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Target</th>
+                        </tr>
+                        <tr>
+                            <td>Win Rate</td>
+                            <td>> 55% (asymmetric bets don't need high win rate)</td>
+                        </tr>
+                        <tr>
+                            <td>Avg Win</td>
+                            <td>> 80% return</td>
+                        </tr>
+                        <tr>
+                            <td>Avg Loss</td>
+                            <td>< 60% loss</td>
+                        </tr>
+                        <tr>
+                            <td>Execution Speed</td>
+                            <td>< 2 seconds</td>
+                        </tr>
+                        <tr>
+                            <td>Daily Trades</td>
+                            <td>5-15</td>
+                        </tr>
+                    </table>
+
+                    <div class="highlight">
+                        <h3>THE END GAME</h3>
+                        <p>Once you hit $300k, you have options:</p>
+                        <ul>
+                            <li><strong>Cash Out:</strong> Withdraw and lock in the win</li>
+                            <li><strong>Keep Going:</strong> Target $1M+ (same strategies, bigger size)</li>
+                            <li><strong>Diversify:</strong> Move some to safer investments, keep trading with rest</li>
+                        </ul>
+                        <p><strong>Remember:</strong> These edges won't last forever. Markets get efficient. Competition increases. Extract maximum value NOW.</p>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger">
+                    <strong>REALITY CHECK:</strong> Most people will fail at Week 1. They'll hesitate, overthink, or execute poorly. If you can get past Week 1 with profitable trades, you're already ahead of 95% of people who try this. Keep pushing.
+                </div>
+            </div>
+
+            <!-- TOOLS PAGE -->
+            <div id="tools" class="page-content">
+                <div class="page-header">
+                    <h1>TOOLS & SETUP</h1>
+                    <p>Everything you need to access</p>
+                </div>
+
+                <div class="section">
+                    <h2>ESSENTIAL (GET TODAY)</h2>
+                    
+                    <h3>1. POLYMARKET ACCOUNT</h3>
+                    <ul>
+                        <li><strong>URL:</strong> <a href="https://polymarket.com" target="_blank">polymarket.com</a></li>
+                        <li><strong>What:</strong> Trading platform</li>
+                        <li><strong>Setup:</strong> Connect MetaMask wallet, fund with USDC</li>
+                        <li><strong>Cost:</strong> Free (2% trading fee)</li>
+                    </ul>
+
+                    <h3>2. METAMASK WALLET</h3>
+                    <ul>
+                        <li><strong>URL:</strong> <a href="https://metamask.io" target="_blank">metamask.io</a></li>
+                        <li><strong>What:</strong> Crypto wallet for Polygon network</li>
+                        <li><strong>Setup:</strong> Install browser extension, create wallet, ADD POLYGON NETWORK</li>
+                        <li><strong>Cost:</strong> Free</li>
+                    </ul>
+
+                    <h3>3. BINANCE ACCOUNT (for price data)</h3>
+                    <ul>
+                        <li><strong>URL:</strong> <a href="https://binance.com" target="_blank">binance.com</a></li>
+                        <li><strong>What:</strong> Real-time crypto prices</li>
+                        <li><strong>Setup:</strong> Create account, get API key (read-only)</li>
+                        <li><strong>Cost:</strong> Free</li>
+                    </ul>
+
+                    <h3>4. PYTHON 3.10+</h3>
+                    <ul>
+                        <li><strong>URL:</strong> <a href="https://python.org" target="_blank">python.org</a></li>
+                        <li><strong>What:</strong> Programming language</li>
+                        <li><strong>Setup:</strong> Download, install, verify with `python --version`</li>
+                        <li><strong>Cost:</strong> Free</li>
+                    </ul>
+
+                    <h3>5. VS CODE</h3>
+                    <ul>
+                        <li><strong>URL:</strong> <a href="https://code.visualstudio.com" target="_blank">code.visualstudio.com</a></li>
+                        <li><strong>What:</strong> Code editor</li>
+                        <li><strong>Setup:</strong> Download, install Python extension</li>
+                        <li><strong>Cost:</strong> Free</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h2>IMPORTANT (GET WEEK 2)</h2>
+                    
+                    <h3>6. DISCORD SERVER</h3>
+                    <ul>
+                        <li><strong>What:</strong> Real-time alerts from bot</li>
+                        <li><strong>Setup:</strong> Create server, create webhook</li>
+                        <li><strong>Cost:</strong> Free</li>
+                    </ul>
+
+                    <h3>7. GITHUB</h3>
+                    <ul>
+                        <li><strong>What:</strong> Code version control</li>
+                        <li><strong>Setup:</strong> Create account, create private repo</li>
+                        <li><strong>Cost:</strong> Free</li>
+                    </ul>
+
+                    <h3>8. GOOGLE SHEETS</h3>
+                    <ul>
+                        <li><strong>What:</strong> Track opportunities and results</li>
+                        <li><strong>Setup:</strong> Create spreadsheet with columns: Date, Market, Strategy, Entry, Exit, Profit</li>
+                        <li><strong>Cost:</strong> Free</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h2>OPTIONAL (LATER)</h2>
+                    
+                    <h3>9. TWITTER API ($100/month)</h3>
+                    <ul>
+                        <li><strong>What:</strong> Breaking news monitoring</li>
+                        <li><strong>When:</strong> Once news arbitrage is working manually</li>
+                    </ul>
+
+                    <h3>10. CLOUD SERVER ($10-50/month)</h3>
+                    <ul>
+                        <li><strong>What:</strong> Run bot 24/7</li>
+                        <li><strong>When:</strong> Once strategies are automated and profitable</li>
+                    </ul>
+
+                    <h3>11. KALSHI ACCOUNT</h3>
+                    <ul>
+                        <li><strong>What:</strong> Cross-market arbitrage</li>
+                        <li><strong>When:</strong> Month 2-3 when scaling</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h2>PYTHON LIBRARIES</h2>
+                    <div class="code-block">
+# Install these:
+pip install web3
+pip install requests
+pip install websockets
+pip install python-dotenv
+pip install discord-webhook
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>QUICK START CODE</h2>
+                    
+                    <h3>Fetch BTC Price</h3>
+                    <div class="code-block">
+import requests
+
+url = "https://api.binance.com/api/v3/ticker/price"
+params = {"symbol": "BTCUSDT"}
+response = requests.get(url, params=params)
+data = response.json()
+btc_price = float(data['price'])
+print(f"BTC: ${btc_price:,.2f}")
+                    </div>
+
+                    <h3>Fetch Polymarket Markets</h3>
+                    <div class="code-block">
+import requests
+
+url = "https://clob.polymarket.com/markets"
+response = requests.get(url)
+markets = response.json()
+
+for market in markets[:10]:
+    print(f"{market['question']}")
+    print(f"YES: ${market['yes_price']}")
+    print(f"NO: ${market['no_price']}")
+    print("---")
+                    </div>
+
+                    <h3>Send Discord Alert</h3>
+                    <div class="code-block">
+import requests
+
+webhook_url = "YOUR_DISCORD_WEBHOOK_URL"
+
+def alert(message):
+    data = {"content": message}
+    requests.post(webhook_url, json=data)
+
+alert("🚨 Opportunity detected!")
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS PAGE -->
+            <div id="settings" class="page-content">
+                <div class="page-header">
+                    <h1>SETTINGS</h1>
+                    <p>Access control</p>
+                </div>
+
+                <div class="section">
+                    <h2>CHANGE PASSWORD</h2>
+                    <p>Current password: <span id="current-pass" style="color: #0f0;">polymarket2024</span></p>
+                    <p style="color: #666; margin-top: 10px;">Password changes persist in browser localStorage. Clear browser data to reset.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULT_PASSWORD = 'polymarket2024';
+        
+        function getCurrentPassword() {
+            return localStorage.getItem('sitePassword') || DEFAULT_PASSWORD;
+        }
+        
+        function handleLogin(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const error = document.getElementById('error-message');
+            
+            if (password === getCurrentPassword()) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-content').classList.add('visible');
+                sessionStorage.setItem('isLoggedIn', 'true');
+            } else {
+                error.classList.add('show');
+                document.getElementById('password').value = '';
+                setTimeout(() => error.classList.remove('show'), 3000);
+            }
+            return false;
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('isLoggedIn');
+            document.getElementById('app-content').classList.remove('visible');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('password').value = '';
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-content').classList.add('visible');
+            }
+        });
+        
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page-content');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                pages.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                const pageId = this.getAttribute('data-page');
+                document.getElementById(pageId).classList.add('active');
+                window.scrollTo(0, 0);
+            });
+        });
+    </script>
+</body>
+</html>
